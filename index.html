@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Talon — a Claude-powered agent harness. Multi-frontend, plugin-based, long-term memory, self-hosted.">
+<meta property="og:title" content="Talon — Claude-powered agent harness">
+<meta property="og:description" content="Multi-frontend. Plugin-based. Long-term memory. Self-hosted.">
+<meta property="og:type" content="website">
+<title>Talon — Claude-powered agent harness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0908;
+    --bg-2: #100e0c;
+    --surface: #16130f;
+    --border: #2a241d;
+    --border-strong: #3d3528;
+    --text: #f4ede4;
+    --text-dim: #a89c8a;
+    --text-mute: #6b6256;
+    --accent: #ff6b35;
+    --accent-2: #ffb627;
+    --accent-soft: rgba(255, 107, 53, 0.12);
+    --accent-glow: rgba(255, 107, 53, 0.35);
+    --green: #4ade80;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    overflow-x: hidden;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 800px 400px at 20% -10%, var(--accent-soft) 0%, transparent 60%),
+      radial-gradient(ellipse 600px 300px at 80% 10%, rgba(255, 182, 39, 0.06) 0%, transparent 70%);
+  }
+
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  .mono { font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace; }
+
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ===== Nav ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(10, 9, 8, 0.7);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-logo .glyph { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    color: var(--text) !important;
+    transition: all 0.15s ease;
+  }
+  .nav-cta:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent) !important;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    padding: 7rem 0 5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 700px 350px at center, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 700px 350px at center, black 0%, transparent 70%);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; z-index: 1; }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    background: var(--accent-soft);
+    border: 1px solid rgba(255, 107, 53, 0.25);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent-2);
+    margin-bottom: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .hero-tag .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(180deg, var(--text) 0%, var(--text-dim) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero h1 .accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p.lead {
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    color: var(--text-dim);
+    max-width: 580px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.55;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 0 1px var(--accent), 0 8px 24px -8px var(--accent-glow);
+  }
+  .btn-primary:hover {
+    background: var(--accent-2);
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 1px var(--accent-2), 0 12px 28px -8px var(--accent-glow);
+  }
+  .btn-ghost {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-2);
+  }
+
+  .install-cmd {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+  .install-cmd .prompt { color: var(--accent); }
+  .install-cmd code { color: var(--text); }
+  .copy-btn {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--text-dim);
+    padding: 0.25rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== Sections ===== */
+  section { padding: 5rem 0; position: relative; }
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    max-width: 640px;
+    margin-bottom: 1.25rem;
+  }
+  .section-lead {
+    color: var(--text-dim);
+    max-width: 580px;
+    font-size: 1.05rem;
+  }
+  .section-head { margin-bottom: 3rem; }
+
+  /* ===== Feature grid ===== */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+  }
+  .feature::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, transparent, var(--accent-soft), transparent);
+    -webkit-mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
+    mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .feature:hover::after { opacity: 1; }
+  .feature-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: var(--accent);
+  }
+  .feature h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .feature p {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  /* ===== Plugin grid ===== */
+  .plugins-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.6rem;
+  }
+  .plugin-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .plugin-card:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-2);
+  }
+  .plugin-card .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .plugin-card.archived { opacity: 0.5; }
+  .plugin-card.archived .dot { background: var(--text-mute); }
+
+  /* ===== Stats strip ===== */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ===== Code block ===== */
+  .code-block {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .code-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .code-header .dot.r { background: #ff5f56; }
+  .code-header .dot.y { background: #ffbd2e; }
+  .code-header .dot.g { background: #27c93f; }
+  .code-header .file { margin-left: 0.75rem; }
+  .code-block pre {
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  .code-block .c { color: var(--text-mute); }
+  .code-block .k { color: var(--accent-2); }
+  .code-block .s { color: #4ade80; }
+  .code-block .v { color: #60a5fa; }
+  .code-block .p { color: var(--accent); }
+
+  /* ===== Footer ===== */
+  footer {
+    padding: 3rem 0 4rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+  }
+  .footer-brand .glyph { color: var(--accent); }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { padding: 4rem 0 3rem; }
+    section { padding: 3.5rem 0; }
+    .install-cmd { font-size: 0.78rem; padding: 0.55rem 0.75rem; }
+    .install-cmd .copy-btn { display: none; }
+  }
+
+  /* Scroll reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <a href="#top" class="nav-logo">
+      <span class="glyph">▲</span>
+      <span>talon</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#plugins">Plugins</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/dylanneve1/talon" class="nav-cta" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top" class="hero">
+  <div class="container hero-inner">
+    <div class="hero-tag">
+      <span class="pulse"></span>
+      <span>v1.9.0 · Claude Opus 4.7</span>
+    </div>
+    <h1>An <span class="accent">agent</span> with claws.</h1>
+    <p class="lead">
+      Talon is a self-hosted, plugin-based agent harness for Claude.
+      Multi-frontend. Long-term memory. Lives where you live.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#install">Get started →</a>
+      <a class="btn btn-ghost" href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">View on GitHub</a>
+    </div>
+    <div class="install-cmd mono">
+      <span class="prompt">$</span>
+      <code>npm install -g talon-agent</code>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('npm install -g talon-agent'); this.textContent='copied'; setTimeout(()=>this.textContent='copy', 1200)">copy</button>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">// what it is</div>
+      <h2 class="section-title">Built for agents that actually live somewhere.</h2>
+      <p class="section-lead">
+        Most harnesses are one-shot terminal wrappers. Talon runs as a long-lived
+        process with persistent memory, hot-swappable MCP plugins, and frontends for
+        wherever you want it &mdash; CLI, Telegram, Microsoft Teams, or your own.
+      </p>
+    </div>
+
+    <div class="features">
+      <div class="feature reveal">
+        <div class="feature-icon">⚡</div>
+        <h3>Built on Claude Agent SDK</h3>
+        <p>First-class Anthropic integration. Adaptive thinking, prompt caching, streaming, tool use, sub-agents — it all just works.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">🔌</div>
+        <h3>Plugin-based</h3>
+        <p>15+ MCP plugins ship in the box. Drop-in path plugins follow a uniform shape. Hot-reload at runtime, no restart.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">🧠</div>
+        <h3>Long-term memory</h3>
+        <p>Mempalace integration: ChromaDB vector store + SQLite knowledge graph. Semantic recall across sessions, not just a context window.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">💬</div>
+        <h3>Multi-frontend</h3>
+        <p>Same brain, different mouths. Run as a Telegram bot, a Teams bot, a terminal app — pick or write your own.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">🌙</div>
+        <h3>Dream &amp; Heartbeat</h3>
+        <p>Background modes for memory consolidation and proactive maintenance. The agent reflects on its own logs while you sleep.</p>
+      </div>
+      <div class="feature reveal">
+        <div class="feature-icon">🦅</div>
+        <h3>Self-hosted</h3>
+        <p>Your VPS, your data, your model choice. No vendor lock-in beyond the model itself. 1,400+ tests keep it honest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="plugins">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">// the ecosystem</div>
+      <h2 class="section-title">Plugins that ship in the box.</h2>
+      <p class="section-lead">
+        Internal plugins live in the talon repo. External path plugins live here in the
+        <a href="https://github.com/talon-agent" target="_blank" rel="noopener" style="color: var(--accent-2)">talon-agent</a>
+        org and follow a uniform shape: a <code class="mono" style="color: var(--accent)">package.json</code> + an
+        <code class="mono" style="color: var(--accent)">src/index.ts</code> exporting an <code class="mono" style="color: var(--accent)">mcpServer</code>.
+      </p>
+    </div>
+
+    <div class="plugins-grid reveal">
+      <div class="plugin-card"><span class="dot"></span>brave-search</div>
+      <div class="plugin-card"><span class="dot"></span>mempalace</div>
+      <div class="plugin-card"><span class="dot"></span>wikipedia</div>
+      <div class="plugin-card"><span class="dot"></span>github</div>
+      <div class="plugin-card"><span class="dot"></span>playwright</div>
+      <div class="plugin-card"><span class="dot"></span>firecrawl</div>
+      <div class="plugin-card"><span class="dot"></span>tailscale</div>
+      <div class="plugin-card"><span class="dot"></span>hetzner</div>
+      <div class="plugin-card"><span class="dot"></span>ssh</div>
+      <a class="plugin-card" href="https://github.com/talon-agent/talon.plugins.ffmpeg" target="_blank" rel="noopener"><span class="dot"></span>ffmpeg</a>
+      <a class="plugin-card" href="https://github.com/talon-agent/talon.plugins.email" target="_blank" rel="noopener"><span class="dot"></span>email</a>
+      <a class="plugin-card" href="https://github.com/talon-agent/talon.plugins.polymarket" target="_blank" rel="noopener"><span class="dot"></span>polymarket</a>
+      <a class="plugin-card" href="https://github.com/talon-agent/talon.plugins.fli" target="_blank" rel="noopener"><span class="dot"></span>fli (flights)</a>
+      <a class="plugin-card" href="https://github.com/talon-agent/talon.plugins.whois" target="_blank" rel="noopener"><span class="dot"></span>whois</a>
+      <div class="plugin-card"><span class="dot"></span>extras</div>
+      <a class="plugin-card archived" href="https://github.com/talon-agent/talon.plugins.x" target="_blank" rel="noopener"><span class="dot"></span>x (archived)</a>
+    </div>
+
+    <div class="stats reveal">
+      <div class="stat">
+        <div class="stat-value">15+</div>
+        <div class="stat-label">MCP plugins</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">1,421</div>
+        <div class="stat-label">tests passing</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">37k</div>
+        <div class="stat-label">lines of TS</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">3</div>
+        <div class="stat-label">frontends</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="section-tag">// get started</div>
+      <h2 class="section-title">Up and running in 60 seconds.</h2>
+      <p class="section-lead">Install, point at a config file, run. Bring your own Anthropic key.</p>
+    </div>
+
+    <div class="code-block reveal">
+      <div class="code-header">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="file">~/talon</span>
+      </div>
+      <pre><span class="c"># Install globally</span>
+<span class="p">$</span> npm install -g <span class="s">talon-agent</span>
+
+<span class="c"># Initialize a config</span>
+<span class="p">$</span> talon <span class="k">init</span>
+
+<span class="c"># Run with the terminal frontend</span>
+<span class="p">$</span> talon <span class="k">start</span> --frontend terminal
+
+<span class="c"># Or as a Telegram bot</span>
+<span class="p">$</span> talon <span class="k">start</span> --frontend telegram</pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="glyph">▲</span>
+      <span>talon · agent harness for Claude</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">talon</a>
+      <a href="https://github.com/talon-agent" target="_blank" rel="noopener">talon-agent org</a>
+      <a href="https://www.npmjs.com/package/talon-agent" target="_blank" rel="noopener">npm</a>
+      <a href="https://github.com/dylanneve1" target="_blank" rel="noopener">@dylanneve1</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
