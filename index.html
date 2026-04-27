@@ -475,9 +475,10 @@
     .install-cmd .copy-btn { display: none; }
   }
 
-  /* Scroll reveal */
-  .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  /* Scroll reveal — start visible (no-JS friendly), animate from below if JS adds .js-reveal-init */
+  .reveal { opacity: 1; transform: none; transition: opacity 0.6s ease, transform 0.6s ease; }
+  body.js-reveal .reveal { opacity: 0; transform: translateY(20px); }
+  body.js-reveal .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
@@ -664,11 +665,16 @@
 </footer>
 
 <script>
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  // Reveal on scroll — only enable if user hasn't requested reduced motion
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.body.classList.add('js-reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.05, rootMargin: '0px 0px -10% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    // Fallback: ensure everything is visible after 1.5s no matter what
+    setTimeout(() => document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible')), 1500);
+  }
 </script>
 
 </body>
