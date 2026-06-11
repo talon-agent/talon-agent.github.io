@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Talon — a Claude-powered agent harness. Multi-frontend, plugin-based, long-term memory, self-hosted.">
+<meta name="description" content="Talon — a multi-platform agentic AI harness. Four frontends, five backends, plugin-based, long-term memory, self-hosted.">
 <meta property="og:title" content="Talon">
-<meta property="og:description" content="A Claude-powered agent harness. Self-hosted, plugin-based, with long-term memory.">
+<meta property="og:description" content="A multi-platform agentic AI harness. Self-hosted, plugin-based, with long-term memory.">
 <meta property="og:type" content="website">
 <title>Talon</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -497,7 +497,7 @@
 <header id="top" class="hero">
   <div class="container">
     <h1>An <span class="accent">agent</span><br>with claws.</h1>
-    <p class="lead">A self-hosted, plugin-based agent harness for Claude. Multi-frontend, with long-term memory.</p>
+    <p class="lead">A self-hosted, plugin-based agent harness. Four frontends, five backends, long-term memory.</p>
     <div class="hero-cta">
       <a class="btn" href="#install">Get started <span class="btn-arrow">→</span></a>
       <a class="btn" href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Source</a>
@@ -505,7 +505,7 @@
   </div>
   <div class="hero-meta">
     <div class="container">
-      <span class="live">v1.9.1 · Opus 4.7</span>
+      <span class="live">v1.15.1 · Fable 5</span>
       <span>github.com/talon-agent</span>
     </div>
   </div>
@@ -516,7 +516,7 @@
     <div class="eyebrow">Overview</div>
     <h2 class="section-h">Built for agents that actually live somewhere.</h2>
     <p class="section-p">
-      Most harnesses are one-shot terminal wrappers. Talon runs as a long-lived process with persistent memory, hot-swappable MCP plugins, and frontends for wherever you need it &mdash; CLI, Telegram, Microsoft Teams, or your own.
+      Most harnesses are one-shot terminal wrappers. Talon runs as a long-lived process with persistent memory, hot-swappable MCP plugins, and frontends for wherever you need it &mdash; CLI, Telegram, Discord, Microsoft Teams, or your own. Underneath, the backend is pluggable too: Claude Agent SDK, Kilo, OpenCode, Codex, or OpenAI Agents.
     </p>
   </div>
 </section>
@@ -529,13 +529,13 @@
     <div class="feature-list">
       <div class="feature-row">
         <div class="num">01</div>
-        <h3>Claude Agent SDK</h3>
-        <p>First-class Anthropic integration. Adaptive thinking, prompt caching, streaming, tool use, sub-agents.</p>
+        <h3>Pluggable backends</h3>
+        <p>Claude Agent SDK, Kilo, OpenCode, Codex, OpenAI Agents &mdash; one capability interface. Streaming, model fallback, context-overflow recovery.</p>
       </div>
       <div class="feature-row">
         <div class="num">02</div>
         <h3>Plugin-based</h3>
-        <p>15+ MCP plugins ship in the box. Drop-in path plugins follow a uniform shape. Hot-reload at runtime.</p>
+        <p>18+ MCP plugins. Built-ins ship in the box; drop-in path plugins follow a uniform shape. Hot-reload at runtime.</p>
       </div>
       <div class="feature-row">
         <div class="num">03</div>
@@ -545,7 +545,7 @@
       <div class="feature-row">
         <div class="num">04</div>
         <h3>Multi-frontend</h3>
-        <p>Same brain, different mouths. Telegram, Teams, terminal &mdash; or write your own.</p>
+        <p>Same brain, different mouths. Telegram, Discord, Teams, terminal &mdash; or write your own.</p>
       </div>
       <div class="feature-row">
         <div class="num">05</div>
@@ -555,7 +555,7 @@
       <div class="feature-row">
         <div class="num">06</div>
         <h3>Self-hosted</h3>
-        <p>Your VPS, your data, your model choice. 1,600+ tests. No vendor lock-in beyond the model itself.</p>
+        <p>Your VPS, your data, your backend choice. 2,300+ tests. No vendor lock-in &mdash; swap the backend, keep the agent.</p>
       </div>
     </div>
   </div>
@@ -574,13 +574,16 @@
     <div class="plugin-list">
       <span>brave-search</span>
       <span>mempalace</span>
-      <span>wikipedia</span>
       <span>github</span>
       <span>playwright</span>
       <span>firecrawl</span>
       <span>tailscale</span>
       <span>hetzner</span>
       <span>ssh</span>
+      <span>tfi</span>
+      <span>twifork</span>
+      <span>ccusage</span>
+      <span>camoufox</span>
       <a href="https://github.com/talon-agent/talon.plugins.ffmpeg" target="_blank" rel="noopener">ffmpeg</a>
       <a href="https://github.com/talon-agent/talon.plugins.email" target="_blank" rel="noopener">email</a>
       <a href="https://github.com/talon-agent/talon.plugins.polymarket" target="_blank" rel="noopener">polymarket</a>
@@ -592,19 +595,19 @@
 
     <div class="stats-row">
       <div>
-        <div class="stat-num">15+</div>
+        <div class="stat-num">18+</div>
         <div class="stat-label">Plugins</div>
       </div>
       <div>
-        <div class="stat-num">1,635</div>
+        <div class="stat-num">2,300+</div>
         <div class="stat-label">Tests passing</div>
       </div>
       <div>
-        <div class="stat-num">37k</div>
-        <div class="stat-label">Lines of TS</div>
+        <div class="stat-num">5</div>
+        <div class="stat-label">Backends</div>
       </div>
       <div>
-        <div class="stat-num">3</div>
+        <div class="stat-num">4</div>
         <div class="stat-label">Frontends</div>
       </div>
     </div>
@@ -615,17 +618,17 @@
   <div class="container observe">
     <div class="eyebrow">Get started</div>
     <h2 class="section-h">Up and running in under a minute.</h2>
-    <p class="section-p">Install, initialise a config, run. Bring your own Anthropic key.</p>
+    <p class="section-p">Install, run the setup wizard, start. Bring your own backend &mdash; Claude Code login, Codex, or an API key.</p>
 
     <div class="install-block">
       <pre><span class="comment"># install</span>
 <span class="prompt">$</span> <span class="cmd">npm install</span> <span class="arg">-g</span> talon-agent
 
-<span class="comment"># initialise</span>
-<span class="prompt">$</span> <span class="cmd">talon init</span>
+<span class="comment"># set up</span>
+<span class="prompt">$</span> <span class="cmd">talon setup</span>
 
 <span class="comment"># run</span>
-<span class="prompt">$</span> <span class="cmd">talon start</span> <span class="arg">--frontend</span> terminal<span class="cursor"></span></pre>
+<span class="prompt">$</span> <span class="cmd">talon start</span><span class="cursor"></span></pre>
       <div class="copy-row">
         <span>quick install</span>
         <button id="copy-btn">copy</button>
@@ -636,7 +639,7 @@
 
 <footer>
   <div class="container footer-inner">
-    <div>talon &middot; agent harness for claude</div>
+    <div>talon &middot; multi-platform agent harness</div>
     <div class="footer-links">
       <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">talon</a>
       <a href="https://github.com/talon-agent" target="_blank" rel="noopener">talon-agent</a>
