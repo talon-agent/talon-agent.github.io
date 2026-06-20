@@ -129,6 +129,75 @@
     .nav-right { gap: 0.9rem; font-size: 0.82rem; }
   }
 
+  /* ===== Hamburger (mobile) ===== */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 0;
+    transition: border-color 200ms ease;
+  }
+  .hamburger:hover { border-color: var(--text-dim); }
+  .hamburger span {
+    display: block;
+    width: 16px;
+    height: 1.5px;
+    background: var(--text-dim);
+    border-radius: 2px;
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease, background 200ms ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--text); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--text); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 10, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem;
+    z-index: 99;
+    flex-direction: column;
+    gap: 0;
+    transform: translateY(-8px);
+    opacity: 0;
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease;
+    pointer-events: none;
+  }
+  .mobile-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .mobile-menu a {
+    display: block;
+    padding: 0.85rem 0;
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    transition: color 200ms ease, padding-left 200ms ease;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: var(--text); padding-left: 0.5rem; }
+
+  @media (max-width: 720px) {
+    .hamburger { display: flex; }
+    .mobile-menu { display: flex; }
+  }
+
   /* ===== Hero ===== */
   .hero {
     min-height: min(820px, 86vh);
@@ -742,9 +811,20 @@
         <a href="#install">Install</a>
       </div>
       <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">GitHub ↗</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <a href="#about" class="mobile-nav-link">Overview</a>
+  <a href="#backends" class="mobile-nav-link">Backends</a>
+  <a href="#plugins" class="mobile-nav-link">Plugins</a>
+  <a href="#install" class="mobile-nav-link">Install</a>
+  <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">GitHub ↗</a>
+</div>
 
 <header id="top" class="hero">
   <div class="container hero-grid">
@@ -756,9 +836,9 @@
         <a class="btn" href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Source</a>
       </div>
       <div class="hero-badges">
-        <span class="live">v1.17.0</span>
-        <span>fable 5</span>
-        <span>2,300+ tests</span>
+        <span class="live">v1.19.0</span>
+        <span>claude sdk</span>
+        <span>3,300+ tests</span>
         <span>MIT</span>
       </div>
     </div>
@@ -825,7 +905,7 @@
 <section id="features">
   <div class="container observe">
     <div class="eyebrow">Capabilities</div>
-    <h2 class="section-h">Six things that matter.</h2>
+    <h2 class="section-h">Seven things that matter.</h2>
 
     <div class="feature-list">
       <div class="feature-row">
@@ -856,7 +936,12 @@
       <div class="feature-row">
         <div class="num">06</div>
         <h3>Self-hosted</h3>
-        <p>Your VPS, your data, your backend choice. 2,300+ tests. No vendor lock-in &mdash; swap the backend, keep the agent.</p>
+        <p>Your VPS, your data, your backend choice. 3,300+ tests. No vendor lock-in &mdash; swap the backend, keep the agent.</p>
+      </div>
+      <div class="feature-row">
+        <div class="num">07</div>
+        <h3>Soul Kernel</h3>
+        <p>A model-free identity substrate that persists across sessions. Collects signal taps &mdash; reactions, corrections, directives &mdash; and builds a self-organizing representation independent of any backend.</p>
       </div>
     </div>
   </div>
@@ -879,28 +964,29 @@
       <span>playwright</span>
       <span>firecrawl</span>
       <span>tailscale</span>
-      <span>hetzner</span>
       <span>ssh</span>
       <span>tfi</span>
       <span>twifork</span>
       <span>ccusage</span>
-      <span>camoufox</span>
+      <span>google-calendar</span>
+      <span>gmail</span>
+      <span>google-drive</span>
+      <span>hugging-face</span>
       <a href="https://github.com/talon-agent/talon.plugins.ffmpeg" target="_blank" rel="noopener">ffmpeg</a>
       <a href="https://github.com/talon-agent/talon.plugins.email" target="_blank" rel="noopener">email</a>
       <a href="https://github.com/talon-agent/talon.plugins.polymarket" target="_blank" rel="noopener">polymarket</a>
       <a href="https://github.com/talon-agent/talon.plugins.fli" target="_blank" rel="noopener">fli</a>
       <a href="https://github.com/talon-agent/talon.plugins.whois" target="_blank" rel="noopener">whois</a>
       <span>extras</span>
-      <span class="archived">x</span>
     </div>
 
     <div class="stats-row">
       <div>
-        <div class="stat-num" data-target="18" data-suffix="+">18+</div>
+        <div class="stat-num" data-target="22" data-suffix="+">22+</div>
         <div class="stat-label">Plugins</div>
       </div>
       <div>
-        <div class="stat-num" data-target="2300" data-suffix="+">2,300+</div>
+        <div class="stat-num" data-target="3300" data-suffix="+">3,300+</div>
         <div class="stat-label">Tests passing</div>
       </div>
       <div>
@@ -977,7 +1063,7 @@
   const termBody = document.getElementById('term-body');
   const script = [
     { cls: 't-cmd',  p: '$', text: 'talon chat', type: true },
-    { cls: 't-sys',  text: '● v1.17.0 · claude · fable-5' },
+    { cls: 't-sys',  text: '● v1.19.0 · claude · opus-4-7' },
     { cls: 't-user', p: '>', text: 'any delays on the 46A right now?', type: true },
     { cls: 't-tool', text: '⚡ tfi_departures · stop 807' },
     { cls: 't-bot',  text: 'Next 46A in 4 min, on time. No disruptions reported.' },
@@ -1011,39 +1097,60 @@
       });
       return;
     }
-    let i = 0;
+
+    let loopTimer = null;
     const cursor = document.createElement('span');
     cursor.className = 't-cursor';
-    function next() {
-      if (i >= script.length) {
-        const tail = document.createElement('span');
-        tail.className = 't-line t-user';
-        tail.innerHTML = '<span class="p">&gt; </span>';
-        tail.appendChild(cursor);
-        termBody.appendChild(tail);
-        return;
-      }
-      const item = script[i++];
-      const el = lineEl(item);
-      const txt = el.querySelector('.txt');
-      termBody.appendChild(el);
-      if (item.type) {
-        el.appendChild(cursor);
-        let c = 0;
-        const t = setInterval(() => {
-          txt.textContent = item.text.slice(0, ++c);
-          if (c >= item.text.length) {
-            clearInterval(t);
+
+    function startLoop() {
+      termBody.innerHTML = '';
+      cursor.remove();
+      let i = 0;
+      function next() {
+        if (i >= script.length) {
+          // show idle prompt then restart after pause
+          const tail = document.createElement('span');
+          tail.className = 't-line t-user';
+          tail.innerHTML = '<span class="p">&gt; </span>';
+          tail.appendChild(cursor);
+          termBody.appendChild(tail);
+          loopTimer = setTimeout(() => {
             cursor.remove();
-            setTimeout(next, 350);
-          }
-        }, 32);
-      } else {
-        txt.textContent = item.text;
-        setTimeout(next, item.cls === 't-tool' ? 550 : 420);
+            // fade out, then restart
+            termBody.style.transition = 'opacity 400ms ease';
+            termBody.style.opacity = '0';
+            setTimeout(() => {
+              termBody.style.opacity = '';
+              termBody.style.transition = '';
+              startLoop();
+            }, 420);
+          }, 3200);
+          return;
+        }
+        const item = script[i++];
+        const el = lineEl(item);
+        const txt = el.querySelector('.txt');
+        termBody.appendChild(el);
+        if (item.type) {
+          el.appendChild(cursor);
+          let c = 0;
+          const t = setInterval(() => {
+            txt.textContent = item.text.slice(0, ++c);
+            if (c >= item.text.length) {
+              clearInterval(t);
+              cursor.remove();
+              setTimeout(next, 350);
+            }
+          }, 32);
+        } else {
+          txt.textContent = item.text;
+          setTimeout(next, item.cls === 't-tool' ? 550 : 420);
+        }
       }
+      setTimeout(next, 800);
     }
-    setTimeout(next, 1100);
+
+    startLoop();
   }
   runTerm();
 
@@ -1071,6 +1178,41 @@
     });
   }, { threshold: 0.5 });
   document.querySelectorAll('.stat-num[data-target]').forEach(el => statIO.observe(el));
+
+  // ===== Hamburger menu =====
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let menuOpen = false;
+
+  function toggleMenu(force) {
+    menuOpen = force !== undefined ? force : !menuOpen;
+    hamburger.classList.toggle('open', menuOpen);
+    mobileMenu.classList.toggle('open', menuOpen);
+    hamburger.setAttribute('aria-expanded', menuOpen);
+    mobileMenu.setAttribute('aria-hidden', !menuOpen);
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+  }
+
+  if (hamburger) {
+    hamburger.addEventListener('click', () => toggleMenu());
+  }
+
+  // Close on link click
+  document.querySelectorAll('.mobile-nav-link').forEach(a => {
+    a.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // Close on outside tap
+  document.addEventListener('click', (e) => {
+    if (menuOpen && !hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+      toggleMenu(false);
+    }
+  });
+
+  // Close on resize to desktop
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 720 && menuOpen) toggleMenu(false);
+  }, { passive: true });
 
   // Copy install command
   const copyBtn = document.getElementById('copy-btn');
