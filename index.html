@@ -354,11 +354,30 @@
     background: #ff7d4d;
     border-color: #ff7d4d;
   }
+  .btn-star {
+    border-color: rgba(255, 107, 53, 0.5);
+    color: var(--accent);
+    background: rgba(255, 107, 53, 0.06);
+  }
+  .btn-star:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 107, 53, 0.1);
+  }
   .btn-arrow {
     display: inline-block;
     transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .btn:hover .btn-arrow { transform: translateX(3px); }
+  .hero-proof {
+    margin-top: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-mute);
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fade-up 800ms cubic-bezier(0.16, 1, 0.3, 1) 480ms forwards;
+  }
 
   /* ===== Terminal window ===== */
   .term-window {
@@ -658,6 +677,52 @@
     .stats-row { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; margin-top: 2.75rem; }
   }
 
+  /* ===== GitHub star funnel ===== */
+  .star-panel {
+    margin-top: 2.75rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+    gap: 2rem;
+    align-items: stretch;
+    border: 1px solid rgba(255, 107, 53, 0.28);
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.09), rgba(255, 255, 255, 0.012) 52%, rgba(95, 184, 138, 0.045));
+    padding: 1.5rem;
+  }
+  .star-copy h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+  .star-copy p {
+    color: var(--text-dim);
+    max-width: 64ch;
+  }
+  .star-actions {
+    display: flex;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+  .star-reasons {
+    display: grid;
+    gap: 0.65rem;
+    align-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+  }
+  .star-reasons span {
+    display: block;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.16);
+    padding: 0.7rem 0.85rem;
+  }
+  @media (max-width: 760px) {
+    .star-panel { grid-template-columns: 1fr; padding: 1.1rem; gap: 1.2rem; }
+  }
+
   /* ===== Install ===== */
   .install-block {
     margin-top: 3rem;
@@ -808,9 +873,10 @@
         <a href="#about">Overview</a>
         <a href="#backends">Backends</a>
         <a href="#plugins">Plugins</a>
+        <a href="#star">Star</a>
         <a href="#install">Install</a>
       </div>
-      <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Star on GitHub</a>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -822,8 +888,9 @@
   <a href="#about" class="mobile-nav-link">Overview</a>
   <a href="#backends" class="mobile-nav-link">Backends</a>
   <a href="#plugins" class="mobile-nav-link">Plugins</a>
+  <a href="#star" class="mobile-nav-link">Star</a>
   <a href="#install" class="mobile-nav-link">Install</a>
-  <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">GitHub ↗</a>
+  <a href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Star on GitHub</a>
 </div>
 
 <header id="top" class="hero">
@@ -832,9 +899,10 @@
       <h1>An <span class="accent">agent</span><br>with claws.</h1>
       <p class="lead">A self-hosted, plugin-based agent harness. Four frontends, five backends, long-term memory.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#install">Get started <span class="btn-arrow">→</span></a>
-        <a class="btn" href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Source</a>
+        <a class="btn btn-primary" href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Star on GitHub <span class="btn-arrow">-&gt;</span></a>
+        <a class="btn btn-star" href="#install">Install Talon</a>
       </div>
+      <div class="hero-proof">MIT, self-hosted, multi-backend, and built to run as a real long-lived agent.</div>
       <div class="hero-badges">
         <span class="live">v1.19.0</span>
         <span>claude sdk</span>
@@ -996,6 +1064,34 @@
       <div>
         <div class="stat-num" data-target="4">4</div>
         <div class="stat-label">Frontends</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="star">
+  <div class="container observe">
+    <div class="eyebrow">GitHub</div>
+    <h2 class="section-h">If Talon looks useful, star the repo.</h2>
+    <p class="section-p">
+      Stars are the easiest public signal that this project is worth trying. They help developers find Talon before they settle for another thin chat wrapper.
+    </p>
+
+    <div class="star-panel">
+      <div class="star-copy">
+        <h3>Self-hosted agents with memory, plugins, and frontends that keep running.</h3>
+        <p>
+          Talon gives you Telegram, Discord, Teams, terminal, and desktop/mobile frontends over one agent core, with MCP plugins, cron, triggers, goals, heartbeat, and dream mode.
+        </p>
+        <div class="star-actions">
+          <a class="btn btn-primary" href="https://github.com/dylanneve1/talon" target="_blank" rel="noopener">Star dylanneve1/talon <span class="btn-arrow">-&gt;</span></a>
+          <a class="btn" href="https://github.com/dylanneve1/talon#quick-start" target="_blank" rel="noopener">Read Quick Start</a>
+        </div>
+      </div>
+      <div class="star-reasons" aria-label="Why developers star Talon">
+        <span>Five interchangeable backends</span>
+        <span>22+ MCP plugins and hot reload</span>
+        <span>Persistent goals, triggers, and memory</span>
       </div>
     </div>
   </div>
